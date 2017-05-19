@@ -1,0 +1,39 @@
+create database bancodedados;
+
+use bancodedados;
+
+CREATE TABLE cargos(
+id int NOT NULL AUTO_INCREMENT,
+nome varchar(50) NOT NULL,
+PRIMARY KEY(id)
+);
+
+CREATE TABLE usuarios(
+id int NOT NULL AUTO_INCREMENT,
+nome varchar(50) NOT NULL,
+email varchar(50) NOT NULL,
+senha varchar(50) NOT NULL,
+id_cargo int,
+PRIMARY KEY(id),
+CONSTRAINT fk_usuarios_cargos
+FOREIGN KEY (id_cargo) REFERENCES cargos(id)
+);
+
+INSERT INTO `bancodedados`.`cargos`
+(`nome`)
+VALUES
+("Gerente");
+
+INSERT INTO `bancodedados`.`usuarios`
+(`nome`,
+`email`,
+`senha`,
+`id_cargo`)
+VALUES
+(
+"jholdy",
+"jholdy@gmail.com",
+"e10adc3949ba59abbe56e057f20f883e",
+1);
+
+senha = 123456
