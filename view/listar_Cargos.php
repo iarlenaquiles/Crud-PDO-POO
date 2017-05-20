@@ -12,8 +12,8 @@
 			<td><?= $value->id; ?></td>
 			<td><?= $value->nome; ?></td>
 			<td>
-				<?= "<a href='../index.php?acao=editar_cargo&id=" . $value->id . "'>Editar</a>"; ?>
-				<?= "<a href='../index.php?acao=deletar_cargo&id=" . $value->id . "' onclick='return confirm(\"Deseja realmente deletar?\")'>Deletar</a>"; ?>
+				<?= "<a href='./index.php?acao=editar_cargo&id=" . $value->id . "'>Editar</a>"; ?>
+				<?= "<a href='./index.php?acao=deletar_cargo&id=" . $value->id . "' onclick='return confirm(\"Deseja realmente deletar?\")'>Deletar</a>"; ?>
 			</td>
 <?php endforeach; ?>
 		</tr>

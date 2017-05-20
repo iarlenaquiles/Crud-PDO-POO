@@ -131,7 +131,7 @@ if (isset($_SESSION['logado'])) {
 	include "view/login.php";
 	if (isset($_POST["logar"])) {
 		if ($logar->logar($_POST["email"], md5($_POST["senha"]))) {
-			header("location:http://teste.app/index.php");
+			header("location:./index.php");
 		}else{
 			echo "Erro ao logar!";
 		}
