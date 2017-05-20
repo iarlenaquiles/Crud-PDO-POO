@@ -1,6 +1,6 @@
 <?php
 session_start();
-	
+
 ini_set('display_errors',1);
 ini_set('display_startup_erros',1);
 error_reporting(E_ALL);
@@ -10,7 +10,7 @@ spl_autoload_register(function($class) {
 	if (file_exists('classes/' . ucfirst($class) . '.php')) {
 		require_once 'classes/' . ucfirst($class) . '.php';
 	}
-	
+
 });
 
 $logar = new Login();
@@ -20,8 +20,9 @@ $logar = new Login();
 <html>
 <meta charset="UTF-8">
 <head>
-   <title>Sistema</title>
-   <link rel="stylesheet" type="text/css" href="/css/css.css" />
+   <title>Sistema C.R.U.D</title>
+	 <link rel="icon" type="image/png" href="assets/images/phpIcon.jpeg" />
+	 <link rel="stylesheet" type="text/css" href="assets/css/application.css" />
 </head>
 <body>
 
@@ -44,9 +45,9 @@ if (isset($_SESSION['logado'])) {
 				$usuario->setNome($_POST['nome']);
 				$usuario->setSenha($_POST['senha']);
 				$usuario->setCargo($_POST['cargo']);
-				
+
 				if ($usuario->setEmail($_POST['email'])){
-					
+
 					if($usuario->insert()){
 						echo "Inserido com sucesso!";
 					}
@@ -77,7 +78,7 @@ if (isset($_SESSION['logado'])) {
 			case 'Cadastrar cargo':
 
 				$cargo->setNome($_POST['cargo']);
-				
+
 				if ($cargo->insert()) {
 					echo "Inserido com sucesso!";
 				}
@@ -87,7 +88,7 @@ if (isset($_SESSION['logado'])) {
 			case 'Atualizar cargo':
 
 				$cargo->setNome($_POST['cargo']);
-				
+
 				if ($cargo->update($_POST['id'])) {
 					echo "Atualizado com sucesso!";
 				}
@@ -124,12 +125,12 @@ if (isset($_SESSION['logado'])) {
 				break;
 
 			case 'novo_usuario':
-				
+
 				include "view/formulario_usuario_cadastrar.php";
 				break;
 
 			case 'listar_usuarios':
-				
+
 				include "view/listar_Usuarios.php";
 				break;
 
@@ -154,17 +155,17 @@ if (isset($_SESSION['logado'])) {
 				break;
 
 			case 'novo_cargo':
-				
+
 				include "view/formulario_cargo_cadastrar.php";
 				break;
 
 			case 'listar_cargos':
-				
+
 				include "view/listar_Cargos.php";
 				break;
 
 			case 'logout':
-				
+
 				$logar->deslogar();
 				break;
 		}
@@ -183,5 +184,6 @@ if (isset($_SESSION['logado'])) {
 	}
 }
 ?>
+<script src="assets/js/application.js"></script>
 </body>
 </html>

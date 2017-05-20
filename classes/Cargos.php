@@ -18,7 +18,7 @@ class Cargos extends Crud
 		$sql  = "INSERT INTO $this->table (nome) VALUES (:nome)";
 		$stmt = DB::prepare($sql);
 
-		$stmt->bindValue(':nome', $this->nome);
+		$stmt->bindValue(':nome', $this->nome, PDO::PARAM_STR);
 
 		return $stmt->execute();
 
@@ -29,8 +29,8 @@ class Cargos extends Crud
 		$sql  = "UPDATE $this->table SET nome = :nome WHERE id = :id";
 		$stmt = DB::prepare($sql);
 
-		$stmt->bindValue(':nome', $this->nome);
-		$stmt->bindValue(':id', $id);
+		$stmt->bindValue(':nome', $this->nome, PDO::PARAM_STR);
+		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
 		return $stmt->execute();
 

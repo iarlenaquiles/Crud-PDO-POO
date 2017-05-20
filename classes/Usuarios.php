@@ -32,8 +32,8 @@ class Usuarios extends Crud
 		$domino = "[a-zA-Z0-9_]+([.]";
 		$extensao = "[a-zA-Z0-9_]+)$/";
 		$pattern = $conta.$domino.$extensao;
-		
-		if ((preg_match($pattern, $email))) { 
+
+		if ((preg_match($pattern, $email))) {
 
 			$this->email = $email;
 
@@ -50,10 +50,10 @@ class Usuarios extends Crud
 			$sql  = "INSERT INTO $this->table (nome, email, senha, id_cargo) VALUES (:nome, :email, :senha, :cargo)";
 			$stmt = DB::prepare($sql);
 
-			$stmt->bindValue(':nome', $this->nome);
-			$stmt->bindValue(':email', $this->email);
-			$stmt->bindValue(':senha', $this->senha);
-			$stmt->bindValue(':cargo', $this->cargo);
+			$stmt->bindValue(':nome', $this->nome, PDO::PARAM_STR);
+			$stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
+			$stmt->bindValue(':senha', $this->senha, PDO::PARAM_STR);
+			$stmt->bindValue(':cargo', $this->cargo, PDO::PARAM_INT);
 
 			return $stmt->execute();
 
@@ -63,16 +63,16 @@ class Usuarios extends Crud
 	}
 
 	public function update($id)
-	{	
+	{
 		try {
 			$sql  = "UPDATE $this->table SET nome = :nome, email = :email, senha = :senha, id_cargo = :cargo WHERE id = :id";
 			$stmt = DB::prepare($sql);
 
-			$stmt->bindValue(':nome', $this->nome);
-			$stmt->bindValue(':email', $this->email);
-			$stmt->bindValue(':senha', $this->senha);
-			$stmt->bindValue(':cargo', $this->cargo);
-			$stmt->bindValue(':id', $id);
+			$stmt->bindValue(':nome', $this->nome, PDO::PARAM_STR);
+			$stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
+			$stmt->bindValue(':senha', $this->senha, PDO::PARAM_STR);
+			$stmt->bindValue(':cargo', $this->cargo, PDO::PARAM_INT);
+			$stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
 			return $stmt->execute();
 
