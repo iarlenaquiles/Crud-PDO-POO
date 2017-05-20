@@ -10,7 +10,7 @@
 		</tr>
 
 <?php
-	 foreach($usuario->findAll() as $key => $value): ?>
+	foreach($usuario->findAll() as $key => $value): ?>
 		<tr>
 			<td><?= $value->id; ?></td>
 			<td><?= $value->nome; ?></td>
@@ -18,11 +18,10 @@
 			<td><?= $value->senha; ?></td>
 			<td><?= $value->id_cargo; ?></td>
 			<td>
-
-				<?= "<a href='../index.php?acao=editar_usuario&id=" . $value->id . "'>Editar</a>"; ?>
-				<?= "<a href='../index.php?acao=deletar_usuario&id=" . $value->id . "' onclick='return confirm(\"Deseja realmente deletar?\")'>Deletar</a>"; ?>
+				<a href='?acao=editar_usuario&id=<?= $value->id; ?>'>Editar</a>
+				<a href='acao=deletar_usuario&id=<?=  $value->id; ?>' onclick='return confirm(\"Deseja realmente deletar?\")'>Deletar</a>
 			</td>
-<?php endforeach; ?>
+	<?php endforeach; ?>
 		</tr>
 	</table>
 </div>
