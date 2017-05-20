@@ -1,189 +1,215 @@
 <?php
 session_start();
+/*
+  Esta função irá ativar o buffer de saída. Enquanto o buffer de saída estiver ativo,
+  não é enviada a saída do script (outros que não sejam cabeçalhos), ao invés a saída
+  é guardada em um buffer interno.
+ */
+ob_start();
 
-ini_set('display_errors',1);
-ini_set('display_startup_erros',1);
+ini_set('display_errors', 1);
+ini_set('display_startup_erros', 1);
 error_reporting(E_ALL);
 
-spl_autoload_register(function($class) {
-
-	if (file_exists('classes/' . ucfirst($class) . '.php')) {
-		require_once 'classes/' . ucfirst($class) . '.php';
-	}
-
+spl_autoload_register(function ($class) {
+    if (file_exists('classes/' . ucfirst($class) . '.php')) {
+        require_once 'classes/' . ucfirst($class) . '.php';
+    }
 });
 
 $logar = new Login();
 
-?>
-
-<html>
-<meta charset="UTF-8">
-<head>
-   <title>Sistema C.R.U.D</title>
-	 <link rel="icon" type="image/png" href="assets/images/phpIcon.jpeg" />
-	 <link rel="stylesheet" type="text/css" href="assets/css/application.css" />
-</head>
-<body>
-
-<?php
-
-
+include "view/layout/head.php";
 
 if (isset($_SESSION['logado'])) {
+    $usuario = new Usuarios();
+    $cargo = new Cargos();
 
-	$usuario = new Usuarios();
-	$cargo = new Cargos();
+    include "view/layout/menu.php";
 
-	include "view/head.php";
+    if (isset($_POST['acao'])) {
+        switch ($_POST['acao']) {
+            case 'Cadastrar usuario':
 
-	if (isset($_POST['acao'])) {
+                $usuario->setNome($_POST['nome']);
+                $usuario->setSenha($_POST['senha']);
+                $usuario->setCargo($_POST['cargo']);
 
-		switch ($_POST['acao']) {
-			case 'Cadastrar usuario':
+                if ($usuario->setEmail($_POST['email'])) {
+                    if ($usuario->insert()) {
+                        ?>
+							<div class="alert alert-success alert-dismissable">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+									Inserido com sucesso!
+							</div>
+						<?php
 
-				$usuario->setNome($_POST['nome']);
-				$usuario->setSenha($_POST['senha']);
-				$usuario->setCargo($_POST['cargo']);
+                    }
+                } else {
+                    ?>
+					<div class="alert alert-danger alert-dismissable">
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+							O e-mail inserido é invalido!
+					</div>
+				<?php
 
-				if ($usuario->setEmail($_POST['email'])){
+                }
 
-					if($usuario->insert()){
-						echo "Inserido com sucesso!";
-					}
+                break;
 
-				} else {
-					echo "O e-mail inserido é invalido!";
-				}
+            case 'Atualizar usuario':
 
-				break;
+                $usuario->setNome($_POST['nome']);
+                $usuario->setSenha($_POST['senha']);
+                $usuario->setCargo($_POST['cargo']);
 
-			case 'Atualizar usuario':
+                if ($usuario->setEmail($_POST['email'])) {
+                    $usuario->update($_POST['id']); ?>
+										<div class="alert alert-success alert-dismissable">
+					              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+					              Atualizado com sucesso!
+					          </div>
+									<?php
 
-				$usuario->setNome($_POST['nome']);
-				$usuario->setSenha($_POST['senha']);
-            	$usuario->setCargo($_POST['cargo']);
+                } else {
+                    ?>
+					<div class="alert alert-danger alert-dismissable">
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+							O e-mail inserido é invalido!
+					</div>
+				<?php
 
-				if ($usuario->setEmail($_POST['email'])) {
+                }
 
-              		$usuario->update($_POST['id']);
-					echo "Atualizado com sucesso!";
+                break;
 
-				} else {
-					echo "O e-mail inserido é invalido!";
-				}
+            case 'Cadastrar cargo':
 
-				break;
+                $cargo->setNome($_POST['cargo']);
 
-			case 'Cadastrar cargo':
+                if ($cargo->insert()) {
+                    ?>
+					<div class="alert alert-success alert-dismissable">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              Inserido com sucesso!
+          </div>
+					<?php
 
-				$cargo->setNome($_POST['cargo']);
+                }
 
-				if ($cargo->insert()) {
-					echo "Inserido com sucesso!";
-				}
+                break;
 
-				break;
+            case 'Atualizar cargo':
 
-			case 'Atualizar cargo':
+                $cargo->setNome($_POST['cargo']);
 
-				$cargo->setNome($_POST['cargo']);
+                if ($cargo->update($_POST['id'])) {
+                    ?>
+					<div class="alert alert-success alert-dismissable">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              Atualizado com sucesso!
+          </div>
+					<?php
 
-				if ($cargo->update($_POST['id'])) {
-					echo "Atualizado com sucesso!";
-				}
+                }
 
-				break;
-		}
-
-	}
+                break;
+        }
+    }
 
 //crud de cargos e usuarios
 
-	if (isset($_GET['acao'])) {
+    if (isset($_GET['acao'])) {
+        switch ($_GET['acao']) {
 
-		switch ($_GET['acao']) {
+            //Crud Usuarios
 
-			//Crud Usuarios
+            case 'deletar_usuario':
 
-			case 'deletar_usuario':
+                $id = (int)$_GET['id'];
 
-				$id = (int)$_GET['id'];
+                if ($usuario->delete($id)) {
+                    ?>
+					<div class="alert alert-success alert-dismissable">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              Deletado com sucesso!
+          </div>
+					<?php
 
-				if ($usuario->delete($id)) {
-					echo "Deletado com sucesso!";
-				}
+                }
 
-				break;
+                break;
 
-			case 'editar_usuario':
+            case 'editar_usuario':
 
-				$id = (int)$_GET['id'];
-				$resultado = $usuario->find($id);
-				include "view/formulario_usuario_atualizar.php";
+                $id = (int)$_GET['id'];
+                $resultado = $usuario->find($id);
+                include "view/usuario/formulario_usuario_atualizar.php";
 
-				break;
+                break;
 
-			case 'novo_usuario':
+            case 'novo_usuario':
 
-				include "view/formulario_usuario_cadastrar.php";
-				break;
+                include "view/usuario/formulario_usuario_cadastrar.php";
+                break;
 
-			case 'listar_usuarios':
+            case 'listar_usuarios':
 
-				include "view/listar_Usuarios.php";
-				break;
+                include "view/usuario/listar_usuarios.php";
+                break;
 
-		//Crud Cargos
+        //Crud Cargos
 
-			case 'deletar_cargo':
+            case 'deletar_cargo':
 
-				$id = (int)$_GET['id'];
+                $id = (int)$_GET['id'];
 
-				if ($cargo->delete($id)) {
-					echo "Deletado com sucesso!";
-				}
+                if ($cargo->delete($id)) {
+                    ?>
+					<div class="alert alert-success alert-dismissable">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              Deletado com sucesso!
+          </div>
+					<?php
 
-				break;
+                }
 
-			case 'editar_cargo':
+                break;
 
-				$id = (int)$_GET['id'];
-				$resultado = $cargo->find($id);
-				include "view/formulario_cargo_atualizar.php";
+            case 'editar_cargo':
 
-				break;
+                $id = (int)$_GET['id'];
+                $resultado = $cargo->find($id);
+                include "view/cargo/formulario_cargo_atualizar.php";
 
-			case 'novo_cargo':
+                break;
 
-				include "view/formulario_cargo_cadastrar.php";
-				break;
+            case 'novo_cargo':
 
-			case 'listar_cargos':
+                include "view/cargo/formulario_cargo_cadastrar.php";
+                break;
 
-				include "view/listar_Cargos.php";
-				break;
+            case 'listar_cargos':
 
-			case 'logout':
+                include "view/cargo/listar_cargos.php";
+                break;
 
-				$logar->deslogar();
-				break;
-		}
-	}
+            case 'logout':
+
+                $logar->deslogar();
+                break;
+        }
+    }
 } else {
+    include "view/login/index.php";
 
-	include "view/login.php";
-
-	if (isset($_POST["logar"])) {
-
-		if ($logar->logar($_POST["email"], md5($_POST["senha"]))) {
-			header("location: index.php");
-		} else {
-			echo "Erro ao logar!";
-		}
-	}
+    if (isset($_POST["logar"])) {
+        if ($logar->logar($_POST["email"], md5($_POST["senha"]))) {
+            header("location: index.php");
+        } else {
+            echo "Erro ao logar!";
+        }
+    }
 }
-?>
-<script src="assets/js/application.js"></script>
-</body>
-</html>
+
+include "view/layout/footer.php";

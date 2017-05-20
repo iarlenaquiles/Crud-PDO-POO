@@ -4,42 +4,40 @@ require_once 'DB.php';
 
 abstract class Crud extends DB
 {
+    protected $table;
 
-	protected $table;
+    abstract public function insert();
+    abstract public function update($id);
 
-	abstract public function insert();
-	abstract public function update($id);
+    public function find($id)
+    {
+        $sql  = "SELECT * FROM $this->table WHERE id = :id";
+        $stmt = DB::prepare($sql);
 
-	public function find($id)
-	{
-		$sql  = "SELECT * FROM $this->table WHERE id = :id";
-		$stmt = DB::prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
-		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
-		$stmt->execute();
+        return $stmt->fetch();
+    }
 
-		return $stmt->fetch();
-	}
+    public function findAll()
+    {
+        $sql  = "SELECT * FROM $this->table";
+        $stmt = DB::prepare($sql);
 
-	public function findAll()
-	{
-		$sql  = "SELECT * FROM $this->table";
-		$stmt = DB::prepare($sql);
+        $stmt->execute();
 
-		$stmt->execute();
+        return $stmt->fetchAll();
+    }
 
-		return $stmt->fetchAll();
-	}
+    public function delete($id)
+    {
+        $sql  = "DELETE FROM $this->table WHERE id = :id";
+        $stmt = DB::prepare($sql);
 
-	public function delete($id)
-	{
-		$sql  = "DELETE FROM $this->table WHERE id = :id";
-		$stmt = DB::prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
-		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
-		
-		return $stmt->execute();
-	}
-
+        return $stmt->execute();
+    }
 }
