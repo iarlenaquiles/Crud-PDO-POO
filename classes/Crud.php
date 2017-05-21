@@ -29,6 +29,14 @@ abstract class Crud extends DB
         return $stmt->fetch();
     }
 
+    public function findByEmail($email){
+        $sql = "SELECT * FROM $this->table WHERE email = :email";
+        $stmt = DB::prepare($sql);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
     public function findAll()
     {
         $sql  = "SELECT * FROM $this->table";

@@ -26,23 +26,24 @@ session_start();
   			$usuario->setNome($_POST['nome']);
   			$usuario->setSenha($_POST['senha']);
   			$usuario->setCargo($_POST['cargo']);
-  			if ($usuario->setEmail($_POST['email'])) {
-  				if ($usuario->insert()) {
-  					?>
-  					<div class="alert alert-success alert-dismissable">
-  						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-  						Inserido com sucesso!
-  					</div>
-  					<?php
-  				}
-  			} else {
-  				?>
-  				<div class="alert alert-danger alert-dismissable">
-  					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-  					O e-mail inserido é invalido!
-  				</div>
-  				<?php
-  			}
+
+  			if(isset($usuario->findByEmail($_POST['email'])->email) == $_POST['email']){ ?>
+  			<div class="alert alert-danger alert-dismissable">
+  				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+  				O e-mail já está cadastrado!
+  			</div>
+  			<?php }else{
+  				if ($usuario->setEmail($_POST['email'])) {
+  					if ($usuario->insert()) {
+  						?>
+  						<div class="alert alert-success alert-dismissable">
+  							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+  							Inserido com sucesso!
+  						</div>
+  						<?php
+  					}
+  				} 
+  			} 
   			break;
   			case 'Atualizar usuario':
   			$usuario->setNome($_POST['nome']);
@@ -66,7 +67,6 @@ session_start();
   			break;
   			case 'Cadastrar cargo':
   			$cargo->setNome($_POST['cargo']);
-  			$cargos = $cargo->findByNome($_POST['cargo']);
 
   			if(isset($cargo->findByNome($_POST['cargo'])->nome) == $_POST['cargo']){ ?>
   			<div class="alert alert-danger alert-dismissable">
