@@ -32,4 +32,5 @@ class Cargos extends Crud
 
         return $stmt->execute();
     }
+
 }
